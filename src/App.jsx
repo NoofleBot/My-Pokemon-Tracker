@@ -1,33 +1,92 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [pokemonList, setPokemonList] = useState([])
+  const [pokemonData, setPokemonData] = useState()
+  const [pokemonSpeciesData, setPokemonSpeciesData] = useState()
+  const [pokemonName, setPokemonName] = useState('')
+
+  // gets the list of the original 151 pokemon
+  useEffect(() => {
+    fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
+      .then(response => response.json())
+      .then(data => setPokemonList(data.results))
+      .catch(error => console.error('Error fetching Pokemon list:', error));
+  }, [])
+
+  // gets an individual pokemon's data
+  useEffect(() => {
+    if (!pokemonName) return;
+    fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+      .then(response => response.json())
+      .then(data => {
+        setPokemonData(data)
+          .catch(error => console.error('Error fetching pokemon:', error));
+      })
+  }, [pokemonName])
+
+  // gets an individual pokemon species's data
+  useEffect(() => {
+    if (!pokemonName) return;
+    fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`)
+      .then(response => response.json())
+      .then(data => {
+        setPokemonData(data)
+          .catch(error => console.error('Error fetching pokemon species:', error));
+      })
+  }, [pokemonName])
 
   return (
     <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      {pokemonData ? (
+        // show pokedex entry details
+        <div className='pokedex-details'>
+          {/* back button */}
+          <button onClick={() => setPokemonData(null)}>Return to Pokedex</button>
+
+          <h1>{pokemonData.name}</h1>
+          {/* flavor text */}
+
+          {/* height and weight */}
+
+
+          {/* types */}
+
+
+          {/* base stats */}
+          {/* {pokemonData.stats ? (
+            <>
+              <h2>Base Stats</h2>
+              <p>HP: {pokemonData.stats[0]?.base_stat}</p>
+              <p>Attack: {pokemonData.stats[1]?.base_stat}</p>
+              <p>Defense: {pokemonData.stats[2]?.base_stat}</p>
+              <p>Special-Attack: {pokemonData.stats[3]?.base_stat}</p>
+              <p>Special-Defense: {pokemonData.stats[4]?.base_stat}</p>
+              <p>Speed: {pokemonData.stats[5]?.base_stat}</p>
+            </>
+          )}  */}
+
+          {/* moves */}
+
+
+        </div>
+
+      ) : (
+        // show full pokedex
+        <>
+          <h1>Pokedex</h1>
+          <div className='pokedex-box'>
+            {pokemonList.map((pokemon, index) => (
+              <div key={index} className='pokemon-card' onClick={() => setPokemonName(pokemon.name)}>
+                <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${index + 1}.gif`} />
+                <p>#{index + 1} <strong>{pokemon.name}</strong></p>
+              </div>
+            ))}
+          </div>
+        </>
+      )
+      }
     </>
   )
 }
