@@ -64,6 +64,15 @@
   text-transform: capitalize;
 }
 
+.pokemon-name {
+  text-transform: capitalize;
+}
+
+.pokemon-genus {
+  font-style: italic;
+}
+
+
 /* loading spinner */
 .loader {
   width: 48px;

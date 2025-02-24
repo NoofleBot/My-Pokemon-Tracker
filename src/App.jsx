@@ -32,31 +32,38 @@ function App() {
     fetch(`https://pokeapi.co/api/v2/pokemon-species/${pokemonName}`)
       .then(response => response.json())
       .then(data => {
-        setPokemonData(data)
+        setPokemonSpeciesData(data)
           .catch(error => console.error('Error fetching pokemon species:', error));
       })
   }, [pokemonName])
 
   return (
     <>
-      {pokemonData ? (
+      {pokemonData && pokemonSpeciesData? (
         // show pokedex entry details
         <div className='pokedex-details'>
           {/* back button */}
           <button onClick={() => setPokemonData(null)}>Return to Pokedex</button>
 
-          <h1>{pokemonData.name}</h1>
+          <h1 className='pokemon-name'>{pokemonData.name}</h1>
+          <p>No. {pokemonData.id}</p>
+
+          {/* genus text */}
+          <p className='genus'><em>The {pokemonSpeciesData.genera.find((n) => n.language.name === 'en').genus}</em></p>
+
           {/* flavor text */}
+          <p className='flavor-text'>{pokemonSpeciesData.flavor_text_entries.find((n) => n.language.name === 'en').flavor_text}</p>
+
 
           {/* height and weight */}
-
+          <p>{}</p>
 
           {/* types */}
 
 
           {/* base stats */}
-          {/* {pokemonData.stats ? (
-            <>
+          {pokemonData.stats ? (
+            <div className='pokemon-stats'>
               <h2>Base Stats</h2>
               <p>HP: {pokemonData.stats[0]?.base_stat}</p>
               <p>Attack: {pokemonData.stats[1]?.base_stat}</p>
@@ -64,8 +71,10 @@ function App() {
               <p>Special-Attack: {pokemonData.stats[3]?.base_stat}</p>
               <p>Special-Defense: {pokemonData.stats[4]?.base_stat}</p>
               <p>Speed: {pokemonData.stats[5]?.base_stat}</p>
-            </>
-          )}  */}
+            </div>
+          ) : (
+              <div className='loader'></div>
+          )}
 
           {/* moves */}
 
