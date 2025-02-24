@@ -64,12 +64,16 @@
   text-transform: capitalize;
 }
 
-.pokemon-name {
+.pokemon-name, .pokemon-types {
   text-transform: capitalize;
 }
 
 .pokemon-genus {
   font-style: italic;
+}
+
+.pokemon-moves {
+  display: inline-block;
 }
 
 

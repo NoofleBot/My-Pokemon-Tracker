@@ -22,8 +22,8 @@ function App() {
       .then(response => response.json())
       .then(data => {
         setPokemonData(data)
-          .catch(error => console.error('Error fetching pokemon:', error));
       })
+      .catch(error => console.error('Error fetching pokemon:', error));
   }, [pokemonName])
 
   // gets an individual pokemon species's data
@@ -33,8 +33,8 @@ function App() {
       .then(response => response.json())
       .then(data => {
         setPokemonSpeciesData(data)
-          .catch(error => console.error('Error fetching pokemon species:', error));
       })
+      .catch(error => console.error('Error fetching pokemon species:', error));
   }, [pokemonName])
 
   return (
@@ -54,17 +54,18 @@ function App() {
           {/* flavor text */}
           <p className='flavor-text'>{pokemonSpeciesData.flavor_text_entries.find((n) => n.language.name === 'en').flavor_text}</p>
 
-
           {/* height and weight */}
-          <p>{}</p>
+          <p>Height: {pokemonData.height / 10} m</p>
+          <p>Weight: {pokemonData.weight / 10} kg</p>
 
           {/* types */}
+          <p className='pokemon-types'><strong>Type: </strong>{pokemonData.types[0]?.type.name} {pokemonData.types[1]?.type.name}</p>
 
 
           {/* base stats */}
           {pokemonData.stats ? (
             <div className='pokemon-stats'>
-              <h2>Base Stats</h2>
+              <p><strong>Base Stats</strong></p>
               <p>HP: {pokemonData.stats[0]?.base_stat}</p>
               <p>Attack: {pokemonData.stats[1]?.base_stat}</p>
               <p>Defense: {pokemonData.stats[2]?.base_stat}</p>
@@ -77,6 +78,12 @@ function App() {
           )}
 
           {/* moves */}
+          <ul className='pokemon-moves'>
+            <p><strong>Moves</strong></p>
+            {pokemonData.moves.map((move, index) => (
+              <li key={index} className='pokemon-move'>{move.move.name}</li>
+            ))}
+          </ul>
 
 
         </div>
@@ -87,7 +94,9 @@ function App() {
           <h1>Pokedex</h1>
           <div className='pokedex-box'>
             {pokemonList.map((pokemon, index) => (
-              <div key={index} className='pokemon-card' onClick={() => setPokemonName(pokemon.name)}>
+              <div key={index} className='pokemon-card' onClick={() => {
+                setPokemonName(pokemon.name);
+              }}>
                 <img src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${index + 1}.gif`} />
                 <p>#{index + 1} <strong>{pokemon.name}</strong></p>
               </div>
